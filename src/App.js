@@ -1,23 +1,54 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState, useEffect } from 'react';
+import { BrowserRouter as Router, Route } from 'react-router-dom';
+import { Container, CircularProgress } from '@mui/material';
+import { styled } from '@mui/material/styles';
+
+import RoutesConf from './RoutesConfig';
+
+import { darkTheme } from './themes';
+
+const Root = styled('div')({
+  flexGrow: 1,
+  backgroundColor: darkTheme.palette.background.default,
+  minHeight: '100vh',
+  position: 'relative',
+});
+
+const SpinnerContainer = styled('div')({
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+});
+
+const AppContent = () => {
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      setLoading(false);
+    }, 2000);
+
+    return () => clearTimeout(timeout);
+  }, []);
+
+  return (
+    <Root>
+      {loading ? (
+        <SpinnerContainer>
+          <CircularProgress />
+        </SpinnerContainer>
+      ) : (
+        <RoutesConf />
+      )}
+    </Root>
+  );
+};
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <AppContent />
     </div>
   );
 }
